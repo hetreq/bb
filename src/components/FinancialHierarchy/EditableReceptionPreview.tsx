@@ -160,13 +160,20 @@ const PositionItem: React.FC<PositionItemProps> = ({ item, onUpdate, onNameUpdat
   }
 
   const handleSelectItem = (selectedItem: { name: string; price?: number }) => {
-    if (isEditingName) {
+    if (isEditingName && onNameUpdate) {
       setEditName(selectedItem.name)
       if (selectedItem.price !== undefined && selectedItem.price > 0) {
         setEditPrice(Math.abs(selectedItem.price))
       }
+      // Apply the changes immediately
+      onNameUpdate(selectedItem.name)
+      if (onUpdate && selectedItem.price !== undefined && selectedItem.price > 0) {
+        onUpdate({ price: Math.abs(selectedItem.price) })
+      }
     }
     setShowItemModal(false)
+    setIsEditingName(false)
+    setIsEditingPrice(false)
   }
 
   return (
